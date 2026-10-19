@@ -18,7 +18,8 @@ def run(url):
     with sync_playwright() as p:
         browser=p.chromium.launch(channel='msedge',headless=True)
         context=browser.new_context(viewport={'width':1440,'height':1000},accept_downloads=True)
-        page=context.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+        page=context.new_page();errors=[];api_errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+        page.on('response',lambda r:api_errors.append(f'{r.url}: {r.status}') if '/api/' in r.url and '/preview' not in r.url and r.status>=400 else None)
         page.goto(url);page.wait_for_function("document.getElementById('add').disabled===false")
         page.locator('#files').set_input_files([str(f) for f in demos]);page.wait_for_function('photos.length===3&&!importing',timeout=60000)
         page.wait_for_function("document.querySelectorAll('.sheet-open:not(:disabled)').length===3")
@@ -85,6 +86,7 @@ def run(url):
         page.set_viewport_size({'width':1440,'height':1000});page.locator('.row-actions button').nth(2).focus();page.keyboard.press('Enter')
         page.wait_for_function('photos.length===2')
         assert not errors,errors
+        assert not api_errors,api_errors
         browser.close()
     print(json.dumps({'browser':'OK','project_roundtrip':'OK','export':'OK','tab_recovery':'OK','exclusive_editor':'OK','preview_failure':'OK','responsive_layout':'OK','keyboard_remove':'OK'}))
 

@@ -53,5 +53,15 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(output_names(['a.jpg','a.png','A.jpg']), ['a-polaroid.jpg','a-polaroid-2.jpg','A-polaroid-3.jpg'])
         self.assertEqual(output_names(['../x.png'])[0], 'x-polaroid.jpg')
 
+    def test_exif_orientation_is_applied_once_before_template_rotation(self):
+        source=Image.new('RGB',(800,400),'blue')
+        ImageDraw.Draw(source).rectangle((0,0,799,99),fill='red')
+        exif=Image.Exif();exif[274]=6
+        stream=io.BytesIO();source.save(stream,'PNG',exif=exif)
+        loaded=load_image(stream.getvalue())
+        self.assertEqual(loaded.size,(400,800))
+        self.assertEqual(loaded.getpixel((380,400)),(255,0,0))
+        self.assertNotIn(274,loaded.getexif())
+
 
 if __name__ == '__main__':unittest.main()

@@ -20,7 +20,7 @@ def load_image(data):
         if source.width * source.height > 60_000_000:
             raise ValueError('A imagem excede 60 megapixels.')
         source.load()
-        image = ImageOps.exif_transpose(source)
+        image = ImageOps.exif_transpose(source) if source.getexif().get(274, 1) != 1 else source
         profile = source.info.get('icc_profile')
         alpha = image.convert('RGBA').getchannel('A') if image.mode in ('RGBA', 'LA', 'P') else None
         if profile:
@@ -29,13 +29,13 @@ def load_image(data):
                 image = ImageCms.profileToProfile(color, ImageCms.ImageCmsProfile(io.BytesIO(profile)), SRGB, outputMode='RGB')
             except (ValueError, OSError, ImageCms.PyCMSError):
                 image = image.convert('RGB')
-        else:
+        elif image.mode != 'RGB':
             image = image.convert('RGB')
         if alpha is not None:
             background = Image.new('RGB', image.size, 'white')
             background.paste(image, mask=alpha)
             image = background
-        return image.copy()
+        return image.copy() if image is source else image
 
 
 def normalized_edits(edits=None):
@@ -63,7 +63,7 @@ def normalized_edits(edits=None):
 
 
 def oriented(source, rotation):
-    return source.transpose({0: Image.Transpose.ROTATE_180, 90: Image.Transpose.ROTATE_270,
+    return source.transpose({90: Image.Transpose.ROTATE_270,
                              180: Image.Transpose.ROTATE_180, 270: Image.Transpose.ROTATE_90}[rotation]) if rotation else source.copy()
 
 
