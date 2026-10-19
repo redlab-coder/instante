@@ -1,0 +1,22 @@
+name: Relatar um problema
+description: Algo não funcionou como esperado no Instante.
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Versão do Instante
+      placeholder: Ex. 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Como reproduzir
+      description: Descreva os passos, o resultado esperado e o que aconteceu. Use imagens de demonstração, sem fotografias de clientes.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Versão do Windows, navegador e tipo de instalação (instalada ou portátil).

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="390" viewBox="0 0 1440 390" fill="none">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1440" y2="390" gradientUnits="userSpaceOnUse"><stop stop-color="#F3F6F7"/><stop offset="1" stop-color="#E3EDF0"/></linearGradient></defs>
+<rect x="1" y="1" width="1438" height="388" rx="28" fill="url(#bg)" stroke="#DCE5E9"/>
+<rect x="72" y="78" width="68" height="68" rx="20" fill="#315B6A"/>
+<rect x="92" y="89" width="28" height="44" rx="3" stroke="#F3F6F7" stroke-width="2.5"/><path d="M98 95h16v22H98zm3 31h10" stroke="#F3F6F7" stroke-width="2.5"/>
+<text x="160" y="132" font-family="Segoe UI,Arial,sans-serif" font-weight="650" font-size="61" letter-spacing="-2" fill="#263D47">Instante</text>
+<text x="74" y="218" font-family="Segoe UI,Arial,sans-serif" font-size="35" letter-spacing="-.8" fill="#315B6A">Da foto à polaroid.</text>
+<text x="75" y="266" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#657C86">Encaixe, confira e leve para o papel.</text>
+<text x="75" y="327" font-family="Segoe UI,Arial,sans-serif" font-size="14" fill="#657C86" letter-spacing="1.5">PROCESSAMENTO LOCAL  ·  IMPRESSÃO A 300 DPI</text>
+<g transform="translate(1005 45) rotate(8 100 140)"><rect x="0" y="0" width="200" height="285" rx="4" fill="#BDCED4"/><rect x="9" y="9" width="182" height="267" rx="2" fill="#fff"/><rect x="21" y="21" width="158" height="158" fill="#E8E7DE"/><circle cx="130" cy="64" r="21" fill="#C9906C"/><path d="M21 159l55-92 103 108H21z" fill="#A0B7B7"/><path d="M21 179l105-92 53 70v22z" fill="#547E86"/><text x="27" y="225" font-family="Georgia,serif" font-size="17" fill="#315B6A">o que importa fica.</text></g>
+<g transform="translate(1163 112) rotate(-10 72 100)"><rect width="155" height="218" rx="4" fill="#C9D9DE"/><rect x="6" y="6" width="143" height="206" rx="2" fill="#fff"/><rect x="17" y="17" width="121" height="121" fill="#315B6A"/><circle cx="78" cy="58" r="16" fill="#C9906C"/><path d="M38 98c25-24 52-24 80 0" stroke="#BDD0D5" stroke-width="2"/><text x="34" y="178" font-family="Georgia,serif" font-size="14" fill="#315B6A">pequenos instantes.</text></g>
+</svg>

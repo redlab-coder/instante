@@ -1,0 +1,13 @@
+__pycache__/
+build/
+*.spec
+tests/artifacts/
+dist/
+analise/
+.env
+.env.*
+*.pem
+*.key
+.venv/
+.tools/
+*.log

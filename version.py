@@ -1,0 +1,5 @@
+VERSION = "1.0.0"
+REPOSITORY = "redlab-coder/instante"
+PORTABLE_NAMESPACE = "Instante-Portable"
+INSTALLED_MUTEX = "Local\\Instante.Installed.Running"
+INSTALLED_NAMESPACE = "Instante-Installed"
