@@ -11,6 +11,7 @@ import urllib.request
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
+(ROOT/'tests/artifacts').mkdir(parents=True,exist_ok=True)
 from version import PORTABLE_NAMESPACE
 from desktop import SingleInstance
 from browser_check import run
