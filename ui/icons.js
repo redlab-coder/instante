@@ -2,6 +2,7 @@
 // Local vector family: crop corners, nested cuts and consistent rounded strokes.
 const InstanteIcons=(()=>{
   const paths={
+    'clear-all':'<rect x="6" y="6" width="15" height="15" rx="3"/><path d="M16 3H6a3 3 0 0 0-3 3v10m7-6 7 7m-7 0 7-7"/>',
     folder:'<path d="M3 7h7l2 2h9v11H3zM3 7V4h7l2 3"/>',
     save:'<path d="M5 3h12l4 4v14H3V3h2zm2 0v6h10V3M7 21v-8h10v8"/>',
     portrait:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 5h8v9H8zm1 13h6"/>',

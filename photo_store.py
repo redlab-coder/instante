@@ -11,7 +11,7 @@ import weakref
 from pathlib import Path
 
 from PIL import Image
-from engine import load_image
+from engine import load_image, content_bounds, CONTENT_BOX
 
 
 class PhotoRecord:
@@ -30,6 +30,7 @@ class PhotoRecord:
             image = load_image(data)
             self.width, self.height = image.size
             try:
+                self.content_box = content_bounds(image)
                 image.thumbnail((1800, 1800), Image.Resampling.LANCZOS)
                 image.save(self.proxy, 'PNG', compress_level=1)
                 image.save(self.live, 'JPEG', quality=95, subsampling=0)
@@ -72,6 +73,7 @@ class PhotoCache:
             else:
                 with Image.open(record.proxy) as source:
                     image = source.convert('RGB')
+            image.info[CONTENT_BOX] = record.content_box
             if cost <= limit:
                 self.entries[key] = (image, cost)
                 self.used += cost

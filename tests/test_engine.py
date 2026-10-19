@@ -63,5 +63,46 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(loaded.getpixel((380,400)),(255,0,0))
         self.assertNotIn(274,loaded.getexif())
 
+    def test_adjustments_leave_generated_padding_and_template_white(self):
+        image=render_tile(Image.new('RGB',(400,800),(160,160,160)),
+                          {'rotation':0,'brightness':.4,'contrast':.8,'saturation':0,'sharpness':2})
+        for point in ((30,500),(80,500),(1000,500),(70,50),(70,1010)):
+            self.assertEqual(image.getpixel(point),(255,255,255))
+        self.assertLess(max(image.getpixel((542,531))),100)
+        self.assertEqual(image.getpixel((1400,500)),(255,0,0))
+
+    def test_embedded_white_bands_are_protected_but_white_details_are_adjusted(self):
+        source=Image.new('RGB',(800,800),'white');draw=ImageDraw.Draw(source)
+        draw.rectangle((100,100,699,699),fill=(160,160,160))
+        draw.rectangle((300,300,399,399),fill='white')
+        for rotation in (0,90,180,270):
+            for mode in ('contain','cover'):
+                with self.subTest(rotation=rotation,mode=mode):
+                    image=prepare_photo(source,{'rotation':rotation,'mode':mode,'brightness':.4})
+                    for point in ((20,472),(920,472),(472,20),(472,920)):
+                        self.assertEqual(image.getpixel(point),(255,255,255))
+                    self.assertLess(max(image.getpixel((600,600))),110)
+        plain=prepare_photo(source,{'rotation':0,'brightness':.4})
+        self.assertEqual(plain.getpixel((400,400)),(102,102,102))
+        self.assertEqual(plain.getpixel((600,600)),(64,64,64))
+
+    def test_near_white_jpeg_like_bands_and_all_white_images_remain_white(self):
+        source=Image.new('RGB',(800,800),(253,253,253))
+        ImageDraw.Draw(source).rectangle((100,100,699,699),fill='blue')
+        image=prepare_photo(source,{'rotation':0,'brightness':0})
+        self.assertEqual(image.getpixel((20,472)),(255,255,255))
+        self.assertEqual(image.getpixel((472,472)),(0,0,0))
+        for rotation in (0,90,180,270):
+            self.assertEqual(prepare_photo(Image.new('RGB',(100,200),'white'),
+                             {'rotation':rotation,'brightness':0}).getextrema(),((255,255),)*3)
+
+    def test_padding_does_not_bias_photo_contrast(self):
+        source=Image.new('RGB',(800,800),'white')
+        ImageDraw.Draw(source).rectangle((100,100,699,699),fill=(160,160,160))
+        result=prepare_photo(source,{'rotation':0,'contrast':.3})
+        # A uniform photo has no contrast to reduce. Padding must not change its mean.
+        self.assertEqual(result.getpixel((472,472)),(160,160,160))
+        self.assertEqual(result.getpixel((20,472)),(255,255,255))
+
 
 if __name__ == '__main__':unittest.main()

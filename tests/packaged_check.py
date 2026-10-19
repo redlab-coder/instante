@@ -15,6 +15,7 @@ sys.path.insert(0,str(ROOT))
 from version import PORTABLE_NAMESPACE
 from desktop import SingleInstance
 from browser_check import run
+from refinement_browser_check import run as run_refinements
 
 probe=SingleInstance(PORTABLE_NAMESPACE)
 try:
@@ -43,6 +44,7 @@ with tempfile.TemporaryDirectory(prefix='Instante-packaged-test-') as temporary:
         assert second.wait(timeout=25)==0
         assert json.loads(state_path.read_text())['instance']==state['instance']
         run(state['url'])
+        run_refinements(state['url'])
         print(json.dumps({'portable':'OK','tray_lifecycle':'OK','single_instance':'OK'}))
     finally:
         if state and process.poll() is None:

@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/redlab-coder/instante/releases/download/v1.0.0/Instante-Setup-1.0.0.exe"><img src="docs/images/download.svg" width="252" height="54" alt="Baixar Instante para Windows"></a>
+  <a href="https://github.com/redlab-coder/instante/releases/download/v1.0.1/Instante-Setup-1.0.1.exe"><img src="docs/images/download.svg" width="252" height="54" alt="Baixar Instante para Windows"></a>
   <br><sub>Windows 10 e 11 · 64 bits · Instalação sem administrador</sub>
 </p>
 

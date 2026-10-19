@@ -20,7 +20,9 @@ def run(url,folder):
           headers={'X-Instante-Token':token,'Content-Type':'application/octet-stream' if raw else 'application/json',
                    'X-Filename':urllib.parse.quote(name)})
         return urllib.request.urlopen(request,timeout=120)
-    paths=sorted(p for p in Path(folder).iterdir() if p.is_file())
+    supported={'.jpg','.jpeg','.png','.webp','.bmp','.tif','.tiff'}
+    paths=sorted(p for p in Path(folder).iterdir() if p.is_file() and p.suffix.lower() in supported)
+    assert paths,'A pasta não contém imagens compatíveis.'
     hashes={p:hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
     items=[];suggested=0;started=time.monotonic()
     for path in paths:

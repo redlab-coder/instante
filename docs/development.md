@@ -33,9 +33,12 @@ python -m unittest discover -s tests -v
 python app.py --isolated --no-browser --no-tray --no-updates --port 18758
 # Em outro terminal:
 python tests/browser_check.py http://127.0.0.1:18758
+python tests/refinement_browser_check.py http://127.0.0.1:18758
 ```
 
 O teste de navegador verifica edição, preservação das regras de encaixe, lotes salvos, exportação, recuperação, transferência entre abas, falha de prévia, teclado e layouts de 320 a 1440 pixels. Gera capturas com ilustrações próprias, sem fotografias pessoais.
+
+O teste de refinamento cobre a fila de conferência, F durante digitação e em janelas, repetição da tecla, a última foto, prévia atrasada, aba sem edição e preservação do branco na prévia rápida, definitiva e no JPG. Também exercita cancelar, falhar e repetir a remoção de todas as fotos e reabrir o lote salvo. Os dois testes de navegador rodam no executável na validação de distribuição.
 
 ```powershell
 python tests/batch_check.py URL PASTA_DE_REFERENCIA
@@ -63,6 +66,8 @@ python tests/installer_check.py
 Os originais são guardados byte a byte em diretórios temporários locais. Fontes de edição têm até 1800 px; o cache decodificado é limitado a 160 MiB. A exportação lê os originais, processando uma foto por vez e retendo suas referências até concluir. Tarefas de exportação usam arquivos temporários e envio em blocos; resultados recentes são limitados a oito e expiram na criação de novas tarefas após uma hora.
 
 O `.instante` é um ZIP com `project.json` e originais numerados, validados por SHA-256. A abertura verifica formato, limites e estrutura; não extrai caminhos fornecidos pelo arquivo. Uma abertura inválida mantém a sessão anterior. O lote só substitui a sessão depois que todas as fotos foram decodificadas.
+
+Faixas inteiramente brancas nas bordas são identificadas na importação por varreduras estreitas, com tolerância de cinco níveis para quase branco. Seus limites normalizados acompanham tanto os originais quanto as fontes leves. Os ajustes são aplicados ao retângulo de conteúdo antes da composição sobre branco; o preenchimento não entra no cálculo de contraste. Detalhes brancos internos à foto continuam editáveis. Não se trata de segmentação de objetos nem de remoção das margens existentes.
 
 Encerramento forçado pode deixar temporários no Windows. Salvar um lote é a forma de manter fotos e ajustes após reiniciar. Instante e Moldura usam mutexes, identificadores e atualizadores distintos.
 

@@ -27,7 +27,7 @@ def run(url):
         assert page.evaluate("photos[0].edits.mode")=='contain'
         page.locator('[data-fit=cover]').click();assert page.locator('#zoom').is_enabled()
         page.locator('#zoom-number').fill('1.50');page.locator('#zoom-number').press('Enter')
-        page.locator('#rotate').click();assert page.evaluate('photos[0].manual&&photos[0].reviewed')
+        page.locator('#rotate').click();assert page.evaluate('photos[0].manual&&!photos[0].reviewed')
         page.locator('[data-fit=contain]').click();assert page.evaluate('photos[0].edits.zoom')==1
         # Upright is a display transform; export edits never change on view toggle.
         edits=page.evaluate('JSON.stringify(photos[0].edits)')

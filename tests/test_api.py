@@ -67,3 +67,30 @@ class ApiTests(unittest.TestCase):
         for path,data,raw,token,origin in [('heartbeat',{},False,'bad',None),('heartbeat',{},False,app.TOKEN,'https://example.com'),('upload',b'bad',True,app.TOKEN,None),('export/start',{'items':[]},False,app.TOKEN,None)]:
             with self.assertRaises(urllib.error.HTTPError) as caught:self.request(path,data,raw,token,origin)
             self.assertIn(caught.exception.code,(400,403));caught.exception.close()
+
+    def test_clear_is_scoped_atomic_and_releases_only_requested_records(self):
+        photos=[self.upload(name=f'Foto-{n}.jpg') for n in range(3)]
+        with self.assertRaises(urllib.error.HTTPError) as caught:
+            self.request('clear',{'ids':[photos[0]['id'],None]})
+        caught.exception.close()
+        self.assertEqual(len(app.IMAGES),3)
+        with self.request('clear',{'ids':[photos[0]['id'],photos[1]['id'],photos[0]['id'],'missing']}) as response:
+            self.assertEqual(json.load(response)['removed'],2)
+        self.assertEqual(set(app.IMAGES),{photos[2]['id']})
+        with self.request('clear',{'ids':[p['id'] for p in photos]}) as response:
+            self.assertEqual(json.load(response)['removed'],1)
+        self.assertFalse(app.IMAGES)
+
+    def test_embedded_padding_survives_preview_and_jpeg_export(self):
+        source=Image.new('RGB',(800,800),'white')
+        from PIL import ImageDraw
+        ImageDraw.Draw(source).rectangle((100,100,699,699),fill=(160,160,160))
+        stream=io.BytesIO();source.save(stream,'PNG')
+        with self.request('upload',stream.getvalue(),True) as response:photo=json.load(response)
+        self.assertEqual(photo['content_box'],[.125,.125,.875,.875])
+        item={'id':photo['id'],'edits':{'rotation':0,'brightness':.4}}
+        with self.request('preview',item) as response:
+            preview=Image.open(io.BytesIO(response.read()));self.assertEqual(preview.getpixel((60,350)),(255,255,255))
+        image=Image.open(io.BytesIO(self.export([item])))
+        self.assertGreaterEqual(min(image.getpixel((90,531))),253)
+        self.assertLess(max(image.getpixel((542,531))),70)

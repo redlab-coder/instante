@@ -6,11 +6,17 @@ Instale o `Instante-Setup-<versão>.exe` nas [versões oficiais](https://github.
 
 1. Adicione arquivos pelo botão ou arraste-os para a área indicada.
 2. Confira a orientação em **Em pé**. A análise local por rostos pode sugerir giros; todas as fotos começam a conferir. Paisagens, desenhos e colagens podem não ter sugestão ou apresentar sugestão incorreta.
-3. Use **Girar** para 90° no sentido horário ou **180°** para inverter. Marque **Conferida** depois de revisar; um giro manual também marca a orientação como conferida. O filtro na lista reúne as fotos ainda a conferir.
+3. Use **Girar** para 90° no sentido horário ou **180°** para inverter. Marque **Conferida** pelo botão ou pela tecla **F** depois de revisar. No filtro **a conferir**, confirmar seleciona a próxima pendente, retornando ao início se necessário. Fora do filtro, F apenas alterna o estado da foto atual. Qualquer alteração visual pede nova conferência; o giro permanece na foto atual para você avaliar o resultado.
 4. **Inteira** mantém a proporção e o conteúdo, preenchendo de branco as sobras. **Preencher** permite recortar, arrastar e ampliar pelo controle Recorte. O número ao lado de cada ajuste permite inserir um valor exato. Centralizar altera só a posição; Restaurar foto retorna os ajustes e a orientação iniciais desta sessão e pede nova conferência.
 5. **Impressão** mostra o arquivo horizontal: topo da foto à esquerda e faixa vermelha à direita. Trocar a visualização não muda o arquivo final.
 
 As setas ↑/↓ na lista selecionam fotos. Os botões pequenos na linha alteram sua ordem. Na prévia, arraste para posicionar ou use as setas; Shift aumenta o passo. Margens brancas que já existem no arquivo são preservadas.
+
+O atalho F não atua durante a digitação, com janelas abertas ou enquanto a foto selecionada ainda não apareceu. Segurar a tecla não confirma várias fotos em sequência. Ao concluir o filtro, a lista informa que todas foram conferidas e mantém a última foto visível; F permite marcá-la novamente como a conferir.
+
+Os ajustes afetam o conteúdo da foto. O preenchimento branco do encaixe e as faixas brancas externas detectadas no arquivo permanecem brancos, inclusive durante a prévia rápida e na exportação. Detalhes brancos dentro do conteúdo fotografado continuam recebendo os ajustes normalmente.
+
+O ícone de **Remover todas as fotos**, ao lado de Adicionar na coluna Fotos, limpa a sessão depois de confirmar. Salve o lote primeiro se precisar manter seus ajustes. Os arquivos originais e lotes já salvos são preservados.
 
 ## Conferir e exportar
 

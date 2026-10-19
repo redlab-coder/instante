@@ -7,6 +7,7 @@
 | [Desenvolvimento](development.md) | Código, testes e compilação |
 | [Publicação](releases.md) | Instaladores e atualizações |
 | [Validação inicial](history/1.0.0.md) | Verificações realizadas e limites |
+| [Validação 1.0.1](history/1.0.1.md) | Conferência, preenchimento branco, limpeza e responsividade |
 | [Recursos de terceiros](../THIRD-PARTY.md) | Bibliotecas e modelo de orientação |
 
 [← Instante](../README.md)

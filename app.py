@@ -172,7 +172,8 @@ class Handler(BaseHTTPRequestHandler):
                         for record, meta in staged:
                             id_ = secrets.token_hex(12)
                             replacement[id_] = {'record': record, 'name': meta['name']}
-                            response.append(dict(id=id_, width=record.width, height=record.height, **meta))
+                            response.append(dict(id=id_, width=record.width, height=record.height,
+                                                 content_box=record.content_box, **meta))
                         with LOCK:
                             IMAGES.clear()
                             IMAGES.update(replacement)
@@ -191,7 +192,8 @@ class Handler(BaseHTTPRequestHandler):
                     id_ = secrets.token_hex(12)
                     with LOCK:
                         IMAGES[id_] = {'record': record, 'name': name}
-                return self.json_reply(dict(id=id_, name=name, width=record.width, height=record.height))
+                return self.json_reply(dict(id=id_, name=name, width=record.width, height=record.height,
+                                            content_box=record.content_box))
             data = json.loads(body or b'{}')
             if not isinstance(data, dict):
                 raise ValueError('Solicitação inválida.')
@@ -208,6 +210,16 @@ class Handler(BaseHTTPRequestHandler):
                 if removed:
                     CACHE.discard(removed['record'])
                 return self.json_reply({'ok': True})
+            if path == '/api/clear':
+                ids = data.get('ids')
+                if (not isinstance(ids, list) or len(ids) > MAX_PHOTOS
+                        or any(not isinstance(id_, str) for id_ in ids)):
+                    raise ValueError('Lista de fotos inválida.')
+                with LOCK:
+                    removed = [IMAGES.pop(id_) for id_ in dict.fromkeys(ids) if id_ in IMAGES]
+                for photo in removed:
+                    CACHE.discard(photo['record'])
+                return self.json_reply({'ok': True, 'removed': len(removed)})
             if path == '/api/project/save':
                 records = snapshot(data['items'])
                 with tempfile.SpooledTemporaryFile(max_size=8*1024**2) as stream:
