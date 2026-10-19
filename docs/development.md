@@ -39,9 +39,12 @@ O teste de navegador verifica edição, preservação das regras de encaixe, lot
 
 ```powershell
 python tests/batch_check.py URL PASTA_DE_REFERENCIA
+python tests/heavy_photo_check.py URL
 ```
 
 Use uma instância isolada para essa verificação: ela importa o lote indicado e substitui a sessão ao testar salvar/abrir. Não grava fotografias nos artefatos ou no repositório. Verifica a quantidade exportada, dimensões, DPI, perfil ICC, faixa vermelha e hashes dos originais. Essa verificação técnica não aprova a orientação visual de cada foto.
+
+`heavy_photo_check.py` importa 12 imagens sintéticas de 30 megapixels, exercita o arraste e verifica a exportação. Use outra instância isolada, pois o teste adiciona fotos à sessão.
 
 ## Compilar
 
