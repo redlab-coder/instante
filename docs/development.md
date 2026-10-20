@@ -35,11 +35,12 @@ python app.py --isolated --no-browser --no-tray --no-updates --port 18758
 python tests/browser_check.py http://127.0.0.1:18758
 python tests/refinement_browser_check.py http://127.0.0.1:18758
 python tests/import_browser_check.py http://127.0.0.1:18758
+python tests/interaction_browser_check.py http://127.0.0.1:18758
 ```
 
 O teste de navegador verifica edição, preservação das regras de encaixe, lotes salvos, exportação, recuperação, transferência entre abas, falha de prévia, teclado e layouts de 320 a 1440 pixels. Gera capturas com ilustrações próprias, sem fotografias pessoais.
 
-O teste de refinamento cobre a fila de conferência, F durante digitação e em janelas, repetição da tecla, a última foto, prévia atrasada, aba sem edição e preservação do branco na prévia rápida, definitiva e no JPG. Também exercita cancelar, falhar e repetir a remoção de todas as fotos e reabrir o lote salvo. Os três testes de navegador rodam no executável na validação de distribuição.
+O teste de refinamento cobre a fila de conferência, F durante digitação e em janelas, repetição da tecla, a última foto, prévia atrasada, aba sem edição e preservação do branco na prévia rápida, definitiva e no JPG. Também exercita cancelar, falhar e repetir a remoção de todas as fotos e reabrir o lote salvo. Os quatro testes de navegador rodam no executável na validação de distribuição.
 
 ```powershell
 python tests/batch_check.py URL PASTA_DE_REFERENCIA
@@ -49,6 +50,8 @@ python tests/heavy_photo_check.py URL
 Use uma instância isolada para essa verificação: ela importa o lote indicado e substitui a sessão ao testar salvar/abrir. Não grava fotografias nos artefatos ou no repositório. Verifica a quantidade exportada, dimensões, DPI, perfil ICC, faixa vermelha e hashes dos originais. Essa verificação técnica não aprova a orientação visual de cada foto.
 
 `heavy_photo_check.py` importa 12 imagens sintéticas de 30 megapixels, exercita o arraste e verifica a exportação. Use outra instância isolada, pois o teste adiciona fotos à sessão.
+
+O teste de interação mede o deslocamento de um marcador na foto em 64 combinações de resolução, rotação, zoom, encaixe e largura da janela. Confere retorno nas bordas, ausência de gravações da sessão e chamadas de prévia durante o arraste, curva dos filtros e reaproveitamento da prévia.
 
 ## Compilar
 
@@ -66,7 +69,9 @@ O teste de importação cobre a área ampliada, passagem entre elementos interno
 
 ## Memória e arquivos
 
-Os originais são guardados byte a byte em diretórios temporários locais. Fontes de edição têm até 1800 px; o cache decodificado é limitado a 160 MiB. A exportação lê os originais, processando uma foto por vez e retendo suas referências até concluir. Tarefas de exportação usam arquivos temporários e envio em blocos; resultados recentes são limitados a oito e expiram na criação de novas tarefas após uma hora.
+Os originais são guardados byte a byte em diretórios temporários locais. As fontes leves têm até 1800 px. Os originais são decodificados na importação e na exportação; a edição usa as fontes leves. Editor e montagens compartilham até oito prévias recentes por foto e ajustes; solicitações idênticas em andamento são reaproveitadas. Durante o arraste, a posição só é persistida ao soltar, com desenho agrupado por quadro e canvas de composição reutilizado. O deslocamento considera a região efetiva de recorte, a rotação de apresentação e o tamanho da prévia. A curva quadrática dos controles de cor mantém o fator real no lote; carregar um lote antigo não altera seus ajustes.
+
+O cache decodificado é limitado a 160 MiB. A exportação lê os originais, processando uma foto por vez e retendo suas referências até concluir. Tarefas de exportação usam arquivos temporários e envio em blocos; resultados recentes são limitados a oito e expiram na criação de novas tarefas após uma hora.
 
 Lotes antigos com a identificação `Instante` são aceitos para leitura; novos arquivos usam a identificação `PolaroidEditor`. A instalação usa uma identidade própria, sem migração da instalação antiga.
 

@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/redlab-coder/polaroid-editor/releases/download/v1.1.0/PolaroidEditor-Setup-1.1.0.exe"><img src="docs/images/download.svg" width="252" height="54" alt="Baixar Polaroid Editor para Windows"></a>
+  <a href="https://github.com/redlab-coder/polaroid-editor/releases/download/v1.1.1/PolaroidEditor-Setup-1.1.1.exe"><img src="docs/images/download.svg" width="252" height="54" alt="Baixar Polaroid Editor para Windows"></a>
   <br><sub>Windows 10 e 11 · 64 bits · Instalação sem administrador</sub>
 </p>
 

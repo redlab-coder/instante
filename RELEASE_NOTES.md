@@ -1,7 +1,7 @@
-O aplicativo agora se chama **Polaroid Editor**, com nome atualizado na interface, instalador, executáveis, atalhos e bandeja. O repositório passa a ser **redlab-coder/polaroid-editor**.
+O arraste da foto agora acompanha o mouse de forma proporcional ao zoom e ao tamanho mostrado na tela. Ao chegar à borda e voltar, o movimento responde imediatamente. A posição é salva ao soltar, reduzindo o trabalho durante o arraste.
 
-As prévias ficam sempre em pé, inclusive miniaturas e ampliação. Os controles “Em pé” e “Impressão” foram removidos. A exportação continua horizontal, com as mesmas medidas, faixa vermelha e 300 DPI.
+Os filtros têm uma resposta mais suave perto do zero. Pequenos movimentos permitem correções discretas; os extremos continuam disponíveis. Os valores numéricos podem ser ajustados com duas casas decimais, e os lotes já salvos mantêm seus ajustes.
 
-Arraste fotos para qualquer ponto da coluna Fotos ou da área de enquadramento. Um destaque indica onde soltar; arrastar a própria foto continua ajustando sua posição.
+As prévias usam cópias leves e reaproveitam resultados entre o editor e as montagens. A exportação continua usando as fotografias originais, nas mesmas medidas e a 300 DPI.
 
-Instale **PolaroidEditor-Setup-1.1.0.exe** ou use **PolaroidEditor-Portable.exe**. Novos lotes usam a extensão **.polaroid**; lotes antigos **.instante** continuam abrindo. Esta versão usa uma identidade de instalação nova.
+Salve o lote e use **Verificar atualizações** no ícone da bandeja; depois do download, encerre normalmente para aplicar. Também é possível instalar **PolaroidEditor-Setup-1.1.1.exe** ou usar a edição portátil.

@@ -1,4 +1,4 @@
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 REPOSITORY = "redlab-coder/polaroid-editor"
 PORTABLE_NAMESPACE = "PolaroidEditor-Portable"
 INSTALLED_MUTEX = "Local\\PolaroidEditor.Installed.Running"

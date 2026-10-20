@@ -70,7 +70,7 @@ def run(url):
         page.locator('#filter-review').click()
         # A delayed photograph cannot be confirmed while the previous one is visible.
         select(0)
-        page.evaluate('()=>{const id=photos[2].id;sources.get(id)?.then(b=>b.close());sources.delete(id)}')
+        page.evaluate('()=>{const id=photos[2].id;sources.get(id)?.then(b=>b.close());sources.delete(id);previewCache.delete(id)}')
         cdp=context.new_cdp_session(page);cdp.send('Network.enable')
         cdp.send('Network.emulateNetworkConditions',{'offline':False,'latency':600,'downloadThroughput':-1,'uploadThroughput':-1})
         page.locator(f'.photo-row[data-id="{ids[2]}"] .photo-select').click()

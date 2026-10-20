@@ -5,7 +5,7 @@
 3. Atualize capturas reais com o conteúdo de demonstração.
 4. Envie o código e uma tag `v<versão>` correspondente a `version.py`.
 
-O GitHub Actions executa os testes, compila no Windows, verifica o programa e o instalador e publica os arquivos já testados. Uma alteração na branch principal é verificada, mas somente uma tag de versão publica uma release.
+O GitHub Actions executa os testes, compila no Windows e verifica o programa e o instalador. A publicação usa um job Linux para enviar os mesmos arquivos já aprovados, sem recompilação. Uma alteração na branch principal é verificada, mas somente uma tag de versão publica uma release.
 
 As releases incluem `PolaroidEditor-Setup-<versão>.exe`, `PolaroidEditor-Portable.exe`, `update.json` e `SHA256SUMS.txt`. O atualizador instalado aceita apenas o endereço de instalador esperado neste repositório e verifica tamanho e SHA-256 antes de instalar ao encerrar.
 

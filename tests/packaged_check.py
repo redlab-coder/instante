@@ -17,6 +17,7 @@ from desktop import SingleInstance
 from browser_check import run
 from refinement_browser_check import run as run_refinements
 from import_browser_check import run as run_imports
+from interaction_browser_check import run as run_interactions
 
 probe=SingleInstance(PORTABLE_NAMESPACE)
 try:
@@ -47,6 +48,7 @@ with tempfile.TemporaryDirectory(prefix='PolaroidEditor-packaged-test-') as temp
         run(state['url'])
         run_refinements(state['url'])
         run_imports(state['url'])
+        run_interactions(state['url'])
         print(json.dumps({'portable':'OK','tray_lifecycle':'OK','single_instance':'OK'}))
     finally:
         if state and process.poll() is None:

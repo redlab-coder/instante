@@ -14,10 +14,10 @@
 </div>
 <aside class="adjustments"><div class="panel-heading"><h2>Ajustes</h2><button id="reset" class="icon-button" aria-label="Restaurar foto" title="Restaurar foto" disabled><span data-icon="reset"></span></button></div><div class="fit-section"><div class="fit-buttons" role="group" aria-label="Encaixe da foto"><button data-fit="contain" aria-pressed="true" disabled>Inteira</button><button data-fit="cover" aria-pressed="false" disabled>Preencher</button></div><p id="fit-hint">Imagem inteira, com branco nas sobras.</p></div><div class="sliders">
 <div class="adjustment"><label for="zoom"><span data-icon="zoom"></span>Recorte <output id="zoom-value">1,00×</output></label><input id="zoom" type="range" min="1" max="5" step="0.01" value="1" disabled></div>
-<div class="adjustment"><label for="brightness"><span data-icon="brightness"></span>Brilho <output id="brightness-value">0</output></label><input id="brightness" type="range" min="0" max="2" step="0.01" value="1" disabled></div>
-<div class="adjustment"><label for="contrast"><span data-icon="contrast"></span>Contraste <output id="contrast-value">0</output></label><input id="contrast" type="range" min="0" max="2" step="0.01" value="1" disabled></div>
-<div class="adjustment"><label for="saturation"><span data-icon="saturation"></span>Saturação <output id="saturation-value">0</output></label><input id="saturation" type="range" min="0" max="2" step="0.01" value="1" disabled></div>
-<div class="adjustment"><label for="sharpness"><span data-icon="sharpness"></span>Nitidez <output id="sharpness-value">0</output></label><input id="sharpness" type="range" min="0" max="3" step="0.01" value="1" disabled></div>
+<div class="adjustment"><label for="brightness"><span data-icon="brightness"></span>Brilho <output id="brightness-value">0</output></label><input id="brightness" type="range" min="-100" max="100" step="0.2" value="0" disabled></div>
+<div class="adjustment"><label for="contrast"><span data-icon="contrast"></span>Contraste <output id="contrast-value">0</output></label><input id="contrast" type="range" min="-100" max="100" step="0.2" value="0" disabled></div>
+<div class="adjustment"><label for="saturation"><span data-icon="saturation"></span>Saturação <output id="saturation-value">0</output></label><input id="saturation" type="range" min="-100" max="100" step="0.2" value="0" disabled></div>
+<div class="adjustment"><label for="sharpness"><span data-icon="sharpness"></span>Nitidez <output id="sharpness-value">0</output></label><input id="sharpness" type="range" min="-100" max="100" step="0.2" value="0" disabled></div>
 </div></aside></section>
 <section class="output-section"><div class="output-title"><h2>Montagens <span id="sheet-summary"></span></h2><span id="activity" class="print-spec" role="status" aria-live="polite"></span></div><div id="sheets" class="sheets"><div class="empty-sheet">Suas montagens aparecerão aqui.</div></div></section>
 </main>

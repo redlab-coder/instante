@@ -1,5 +1,13 @@
 # Histórico
 
+## 1.1.1 — 2026-10-20
+
+- Arraste proporcional ao tamanho exibido e ao zoom nos modos Preencher e Inteira, com resposta imediata ao inverter o movimento nas bordas.
+- Removidos gravação da sessão e pedidos de prévia durante o arraste; composição de tela reutilizada entre quadros.
+- Filtros com resposta gradual perto do zero e valores exatos de até duas casas decimais; ajustes salvos preservados.
+- Prévias usam fontes leves e compartilham resultados entre o editor e as montagens; exportação continua lendo os originais completos.
+- Testes medem o deslocamento visual da foto, além da frequência dos quadros.
+
 ## 1.1.0 — 2026-10-20
 
 - Nome alterado de Instante para Polaroid Editor, incluindo repositório, interface, atalhos, bandeja, executáveis e identidade da instalação.

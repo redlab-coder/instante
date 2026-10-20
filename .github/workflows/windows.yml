@@ -43,7 +43,7 @@ jobs:
   publish:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: windows
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       actions: read
@@ -60,13 +60,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
-        shell: pwsh
+        shell: bash
         run: |
-          $version = python -c "from version import VERSION; print(VERSION)"
-          if ($env:RELEASE_TAG -ne "v$version") { throw 'A tag deve coincidir com version.py' }
-          gh release create $env:RELEASE_TAG --verify-tag --draft --title "Polaroid Editor $version" --notes-file RELEASE_NOTES.md
-          if ($LASTEXITCODE -ne 0) { throw 'Falha ao criar release' }
-          gh release upload $env:RELEASE_TAG "dist/PolaroidEditor-Setup-$version.exe" dist/PolaroidEditor-Portable.exe dist/update.json dist/SHA256SUMS.txt
-          if ($LASTEXITCODE -ne 0) { throw 'Falha ao enviar os arquivos' }
-          gh release edit $env:RELEASE_TAG --draft=false --latest
-          if ($LASTEXITCODE -ne 0) { throw 'Falha ao publicar release' }
+          set -euo pipefail
+          version=$(python -c 'from version import VERSION; print(VERSION)')
+          if [[ "$RELEASE_TAG" != "v$version" ]]; then
+            echo 'A tag deve coincidir com version.py' >&2
+            exit 1
+          fi
+          gh release create "$RELEASE_TAG" --verify-tag --draft --title "Polaroid Editor $version" --notes-file RELEASE_NOTES.md
+          gh release upload "$RELEASE_TAG" "dist/PolaroidEditor-Setup-$version.exe" dist/PolaroidEditor-Portable.exe dist/update.json dist/SHA256SUMS.txt
+          gh release edit "$RELEASE_TAG" --draft=false --latest

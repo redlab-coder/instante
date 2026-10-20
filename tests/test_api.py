@@ -63,6 +63,18 @@ class ApiTests(unittest.TestCase):
         with self.request('preview',{'id':photo['id']}) as response:self.assertEqual(Image.open(io.BytesIO(response.read())).size,(1000,709))
         with self.request('orientation',{'id':photo['id']}) as response:
             result=json.load(response);self.assertFalse(result['suggested']);self.assertEqual(result['rotation'],270)
+
+    def test_previews_keep_full_originals_out_of_decoded_cache(self):
+        data=io.BytesIO();Image.new('RGB',(4000,3000),(80,110,130)).save(data,'JPEG')
+        with self.request('upload',data.getvalue(),True) as response:photo=json.load(response)
+        for zoom in (1,2,5):
+            with self.request('preview',{'id':photo['id'],'edits':{'mode':'cover','zoom':zoom}}) as response:
+                self.assertEqual(Image.open(io.BytesIO(response.read())).size,(1000,709))
+        self.assertTrue(app.CACHE.entries)
+        self.assertFalse(any(full for _,full in app.CACHE.entries))
+        result=Image.open(io.BytesIO(self.export([{'id':photo['id'],'edits':{'mode':'cover','zoom':5}}])))
+        self.assertEqual(result.size,(1500,1063));self.assertEqual(result.info['dpi'],(300,300))
+        self.assertTrue(any(full for _,full in app.CACHE.entries))
     def test_access_and_invalid_input(self):
         for path,data,raw,token,origin in [('heartbeat',{},False,'bad',None),('heartbeat',{},False,app.TOKEN,'https://example.com'),('upload',b'bad',True,app.TOKEN,None),('export/start',{'items':[]},False,app.TOKEN,None)]:
             with self.assertRaises(urllib.error.HTTPError) as caught:self.request(path,data,raw,token,origin)

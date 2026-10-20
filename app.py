@@ -249,7 +249,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json_reply(result)
             if path in ('/api/preview', '/api/thumbnail'):
                 with CACHE.lock:
-                    image = render_tile(CACHE.get(record, full=path == '/api/preview'), data.get('edits'))
+                    image = render_tile(CACHE.get(record), data.get('edits'))
                 if path.endswith('/thumbnail'):
                     image = image.transpose(Image.Transpose.ROTATE_270)
                     image.thumbnail((128, 180), Image.Resampling.LANCZOS)
