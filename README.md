@@ -1,32 +1,14 @@
-<p align="center">
-  <img src="docs/images/banner.svg" width="100%" alt="Polaroid Editor — da foto à polaroid">
-</p>
+<p align="center"><img src="https://raw.githubusercontent.com/redlab-coder/redlab-editor/main/docs/images/banner.svg" alt="RedLab Editor" width="100%"></p>
 
-<p align="center">
-  <a href="https://github.com/redlab-coder/polaroid-editor/releases/download/v1.1.1/PolaroidEditor-Setup-1.1.1.exe"><img src="docs/images/download.svg" width="252" height="54" alt="Baixar Polaroid Editor para Windows"></a>
-  <br><sub>Windows 10 e 11 · 64 bits · Instalação sem administrador</sub>
-</p>
+# Polaroid Editor — repositório histórico
 
-<p align="center"><a href="https://github.com/redlab-coder/polaroid-editor/releases/latest">Versões e edição portátil</a> · <a href="docs/usage.md">Guia de uso</a></p>
+O desenvolvimento está no **[RedLab Editor](https://github.com/redlab-coder/redlab-editor)**, com Bottons Editor e Polaroid Editor organizados em ferramentas independentes.
 
-![Interface real do Polaroid Editor com ilustrações de demonstração](docs/images/workspace.png)
+O Polaroid Editor continua com a mesma identidade e fluxo de trabalho. Salve o lote antes de encerrar para atualizar.
 
-## Da foto à polaroid
+- [Baixar Polaroid Editor e consultar sua versão atual](https://github.com/redlab-coder/redlab-editor/releases/tag/polaroid-v1.1.2)
+- [Documentação atual](https://github.com/redlab-coder/redlab-editor/tree/main/apps/polaroid-editor)
+- [Relatar um problema](https://github.com/redlab-coder/redlab-editor/issues/new/choose)
+- [Entender a transição](TRANSITION.md)
 
-1. **Adicione suas fotos.** Use o botão ou arraste para a coluna Fotos ou para a área de enquadramento.
-2. **Confira em pé.** Corrija os giros e marque as fotos como conferidas. As prévias ficam sempre em pé.
-3. **Exporte as montagens** ou salve o lote para continuar depois.
-
-## O essencial
-
-- **Medidas definidas.** Foto de 8 × 8 cm em uma folha de 12,7 × 9 cm, a 300 DPI, com faixa vermelha para o corte.
-- **Encaixe simples.** Imagem inteira com preenchimento branco ou recorte escolhido por você.
-- **Conferência em lote.** Miniaturas, navegação por teclado e download individual.
-- **Continuidade.** Arquivos `.polaroid` guardam cópias das fotos e seus ajustes.
-- **Trabalho local.** Edição offline, originais preservados e atualizações na versão instalada.
-
-A orientação sugerida precisa de conferência, especialmente em desenhos e colagens. Imprima em **tamanho real / 100%** e valide uma amostra antes da produção.
-
----
-
-[Documentação](docs/README.md) · [Medidas](docs/printing.md) · [Desenvolvimento](docs/development.md) · [Histórico](CHANGELOG.md) · [Contribuir](CONTRIBUTING.md)
+Os commits, tags e downloads anteriores ficam preservados aqui. A release de transição atende aos atualizadores antigos; as próximas versões são publicadas somente no novo repositório. O código presente aqui registra a etapa anterior à integração. O código dos novos instaladores está nas tags correspondentes do RedLab Editor.
