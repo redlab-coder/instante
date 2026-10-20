@@ -16,7 +16,7 @@ from engine import load_image, content_bounds, CONTENT_BOX
 
 class PhotoRecord:
     def __init__(self, data):
-        self.directory = tempfile.TemporaryDirectory(prefix='Instante-foto-')
+        self.directory = tempfile.TemporaryDirectory(prefix='PolaroidEditor-foto-')
         self._cleanup = weakref.finalize(self, self.directory.cleanup)
         self.original = Path(self.directory.name) / 'original'
         self.proxy = Path(self.directory.name) / 'editor.png'

@@ -1,5 +1,13 @@
 # Histórico
 
+## 1.1.0 — 2026-10-20
+
+- Nome alterado de Instante para Polaroid Editor, incluindo repositório, interface, atalhos, bandeja, executáveis e identidade da instalação.
+- Prévias sempre em pé; removidos os seletores de visualização. Exportação horizontal preservada.
+- Importação por arraste ampliada para a coluna Fotos e o enquadramento, com destaque e proteção contra importações duplicadas.
+- Novos lotes `.polaroid`, mantendo leitura dos lotes antigos `.instante`.
+- Banner, capturas, documentação e distribuição atualizados.
+
 ## 1.0.1 — 2026-10-19
 
 - Conferência com avanço para a próxima pendente somente no filtro a conferir; atalho F para conferir ou desfazer a conferência.

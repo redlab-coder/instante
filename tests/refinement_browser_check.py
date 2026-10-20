@@ -78,12 +78,12 @@ def run(url):
         prior=page.evaluate('photos[2].reviewed');page.keyboard.press('f');assert page.evaluate('photos[2].reviewed')==prior
         ready();cdp.send('Network.emulateNetworkConditions',{'offline':False,'latency':0,'downloadThroughput':-1,'uploadThroughput':-1})
         # Existing padding stays white in the fast canvas, final preview and exported JPG.
-        select(3);page.locator('[data-view=print]').click();page.locator('#rotate').click()
+        select(3);page.locator('#rotate').click()
         page.wait_for_function('current().edits.rotation===0&&displayedPhoto===selected')
         page.route('**/api/preview',lambda route:route.fulfill(status=503,content_type='application/json',body='{"error":"teste"}'))
         page.locator('#brightness-number').fill('-60');page.locator('#brightness-number').press('Enter')
-        page.wait_for_function("document.getElementById('tile-image').getContext('2d').getImageData(670,659,1,1).data[0]<90")
-        pixels=page.evaluate("()=>{const c=document.getElementById('tile-image').getContext('2d');return [[90,531],[670,659],[470,459],[30,531],[1400,531]].map(([x,y])=>Array.from(c.getImageData(x,y,1,1).data).slice(0,3))}")
+        page.wait_for_function("document.getElementById('tile-image').getContext('2d').getImageData(404,670,1,1).data[0]<90")
+        pixels=page.evaluate("()=>{const c=document.getElementById('tile-image').getContext('2d');return [[90,531],[670,659],[470,459],[30,531],[1400,531]].map(([x,y])=>Array.from(c.getImageData(1063-y,x,1,1).data).slice(0,3))}")
         assert pixels[0]==[255,255,255] and pixels[3]==[255,255,255] and pixels[4]==[255,0,0],pixels
         assert 58<=pixels[1][0]<=70 and 98<=pixels[2][0]<=106,pixels
         page.unroute('**/api/preview');page.evaluate('renderEditor()')
@@ -108,7 +108,7 @@ def run(url):
         page.set_viewport_size({'width':1440,'height':1000})
         # A rejected clear keeps every photo, then retry clears only the session.
         with page.expect_download() as event:page.locator('#save-project').click()
-        saved=artifacts/'preserved.instante';event.value.save_as(saved);page.wait_for_function('!exporting')
+        saved=artifacts/'preserved.polaroid';event.value.save_as(saved);page.wait_for_function('!exporting')
         saved_hash=hashlib.sha256(saved.read_bytes()).hexdigest()
         page.route('**/api/clear',lambda route:route.fulfill(status=503,content_type='application/json',body='{"error":"teste de recuperação"}'))
         page.locator('#clear-all').click();page.locator('#clear-confirm').click();page.wait_for_function('!clearing')

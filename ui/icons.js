@@ -1,6 +1,6 @@
 'use strict';
 // Local vector family: crop corners, nested cuts and consistent rounded strokes.
-const InstanteIcons=(()=>{
+const PolaroidEditorIcons=(()=>{
   const paths={
     'clear-all':'<rect x="6" y="6" width="15" height="15" rx="3"/><path d="M16 3H6a3 3 0 0 0-3 3v10m7-6 7 7m-7 0 7-7"/>',
     folder:'<path d="M3 7h7l2 2h9v11H3zM3 7V4h7l2 3"/>',

@@ -28,7 +28,7 @@ class DesktopTests(unittest.TestCase):
         stop=Mock()
         tray=run_tray('http://127.0.0.1:12345',stop,lambda:True)
         items=list(tray.menu.items)
-        self.assertEqual(items[0].text,'Abrir Instante')
+        self.assertEqual(items[0].text,'Abrir Polaroid Editor')
         self.assertTrue(items[0].default)
         with patch('desktop.webbrowser.open') as open_browser:
             items[0](tray)

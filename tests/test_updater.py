@@ -17,7 +17,7 @@ class UpdateTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         self.data = b'fixture installer bytes; never executed'
-        self.manifest = {'version':'1.1.0','url':f'https://github.com/{REPOSITORY}/releases/download/v1.1.0/Instante-Setup-1.1.0.exe','sha256':hashlib.sha256(self.data).hexdigest(),'size':len(self.data)}
+        self.manifest = {'version':'1.1.0','url':f'https://github.com/{REPOSITORY}/releases/download/v1.1.0/PolaroidEditor-Setup-1.1.0.exe','sha256':hashlib.sha256(self.data).hexdigest(),'size':len(self.data)}
 
     def opener(self, request, timeout):
         return io.BytesIO(json.dumps(self.manifest).encode() if request.full_url.endswith('update.json') else self.data)
@@ -76,12 +76,12 @@ class UpdateTests(unittest.TestCase):
         self.assertIsNone(manager.pending)
 
     def test_portable_never_enables_auto_installation(self):
-        executable=self.root/'Instante.exe'
+        executable=self.root/'PolaroidEditor.exe'
         with patch('updater.sys.executable',str(executable)),patch('updater.sys.frozen',True,create=True):
             self.assertIsNone(installed_directory())
-            (self.root/'installed.marker').write_text('Instante\n',encoding='utf-8')
+            (self.root/'installed.marker').write_text('PolaroidEditor\n',encoding='utf-8')
             self.assertEqual(installed_directory(),self.root.resolve())
-            with patch('updater.sys.executable',str(self.root/'Instante-Portable.exe')):
+            with patch('updater.sys.executable',str(self.root/'PolaroidEditor-Portable.exe')):
                 self.assertIsNone(installed_directory())
 
     def test_ui_status_is_readable_while_downloading_and_restored_when_ready(self):

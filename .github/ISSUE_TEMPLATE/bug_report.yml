@@ -1,10 +1,10 @@
 name: Relatar um problema
-description: Algo não funcionou como esperado no Instante.
+description: Algo não funcionou como esperado no Polaroid Editor.
 body:
   - type: input
     id: version
     attributes:
-      label: Versão do Instante
+      label: Versão do Polaroid Editor
       placeholder: Ex. 1.0.0
     validations:
       required: true

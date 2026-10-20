@@ -14,10 +14,10 @@ from PIL import Image
 
 def run(url,folder):
     html=urllib.request.urlopen(url).read().decode()
-    token=re.search('name="instante-token" content="([^"]+)',html).group(1)
+    token=re.search('name="polaroid-editor-token" content="([^"]+)',html).group(1)
     def api(path,data,raw=False,name=''):
         request=urllib.request.Request(url+'/api/'+path,data=data if raw else json.dumps(data).encode(),
-          headers={'X-Instante-Token':token,'Content-Type':'application/octet-stream' if raw else 'application/json',
+          headers={'X-PolaroidEditor-Token':token,'Content-Type':'application/octet-stream' if raw else 'application/json',
                    'X-Filename':urllib.parse.quote(name)})
         return urllib.request.urlopen(request,timeout=120)
     supported={'.jpg','.jpeg','.png','.webp','.bmp','.tif','.tiff'}

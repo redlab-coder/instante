@@ -28,15 +28,15 @@ jobs:
       - name: Compilar aplicativo e instalador
         run: python scripts/build_windows.py
       - name: Verificar EXE e navegador
-        run: python tests/packaged_check.py dist/Instante-Portable.exe
+        run: python tests/packaged_check.py dist/PolaroidEditor-Portable.exe
       - name: Verificar instalação e atualização ao encerrar
         run: python tests/installer_check.py
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: Instante-Windows-${{ github.run_number }}
+          name: PolaroidEditor-Windows-${{ github.run_number }}
           path: |
-            dist/Instante-Setup-*.exe
-            dist/Instante-Portable.exe
+            dist/PolaroidEditor-Setup-*.exe
+            dist/PolaroidEditor-Portable.exe
             dist/update.json
             dist/SHA256SUMS.txt
           if-no-files-found: error
@@ -55,7 +55,7 @@ jobs:
       - name: Baixar os arquivos já testados
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh run download ${{ github.run_id }} --name Instante-Windows-${{ github.run_number }} --dir dist
+        run: gh run download ${{ github.run_id }} --name PolaroidEditor-Windows-${{ github.run_number }} --dir dist
       - name: Publicar versão completa
         env:
           GH_TOKEN: ${{ github.token }}
@@ -64,9 +64,9 @@ jobs:
         run: |
           $version = python -c "from version import VERSION; print(VERSION)"
           if ($env:RELEASE_TAG -ne "v$version") { throw 'A tag deve coincidir com version.py' }
-          gh release create $env:RELEASE_TAG --verify-tag --draft --title "Instante $version" --notes-file RELEASE_NOTES.md
+          gh release create $env:RELEASE_TAG --verify-tag --draft --title "Polaroid Editor $version" --notes-file RELEASE_NOTES.md
           if ($LASTEXITCODE -ne 0) { throw 'Falha ao criar release' }
-          gh release upload $env:RELEASE_TAG "dist/Instante-Setup-$version.exe" dist/Instante-Portable.exe dist/update.json dist/SHA256SUMS.txt
+          gh release upload $env:RELEASE_TAG "dist/PolaroidEditor-Setup-$version.exe" dist/PolaroidEditor-Portable.exe dist/update.json dist/SHA256SUMS.txt
           if ($LASTEXITCODE -ne 0) { throw 'Falha ao enviar os arquivos' }
           gh release edit $env:RELEASE_TAG --draft=false --latest
           if ($LASTEXITCODE -ne 0) { throw 'Falha ao publicar release' }

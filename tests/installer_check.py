@@ -1,7 +1,7 @@
 """Actual per-user install, single instance, deferred update and uninstall.
 
 Uses a temporary application directory and updater state. Never replaces an
-existing user's Instante installation or stops an unrelated application.
+existing user's PolaroidEditor installation or stops an unrelated application.
 """
 import hashlib
 import io
@@ -25,24 +25,24 @@ from version import VERSION, INSTALLED_NAMESPACE, INSTALLED_MUTEX, REPOSITORY
 
 for view in (winreg.KEY_WOW64_32KEY,winreg.KEY_WOW64_64KEY):
     try:
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Uninstall\{AAE0E3E8-B729-46AE-B534-2E04C256A5C1}_is1',0,winreg.KEY_READ|view):
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Uninstall\{F2777E7D-38D9-45D3-A932-F9E7F7BD5D71}_is1',0,winreg.KEY_READ|view):
             raise SystemExit('Teste cancelado: já existe uma instalação registrada do usuário.')
     except FileNotFoundError:pass
 probe=SingleInstance(INSTALLED_NAMESPACE,mutex_name=INSTALLED_MUTEX)
 try:
-    assert probe.owner,'Já há um Instante instalado em execução. O teste não interromperá essa sessão.'
+    assert probe.owner,'Já há um PolaroidEditor instalado em execução. O teste não interromperá essa sessão.'
 finally:probe.close()
 
-setup=ROOT/'dist'/f'Instante-Setup-{VERSION}.exe'
+setup=ROOT/'dist'/f'PolaroidEditor-Setup-{VERSION}.exe'
 flags=getattr(subprocess,'CREATE_NO_WINDOW',0)
-with tempfile.TemporaryDirectory(prefix='Instante-install-test-') as temporary:
+with tempfile.TemporaryDirectory(prefix='PolaroidEditor-install-test-') as temporary:
     sandbox=Path(temporary)
-    directory=sandbox/'Aplicativo Instante'
+    directory=sandbox/'Aplicativo PolaroidEditor'
     env=dict(os.environ,LOCALAPPDATA=str(sandbox/'Local'))
     metadata=Path(env['LOCALAPPDATA'])/INSTALLED_NAMESPACE/'runtime.json'
     current=None
     def start(no_updates=True):
-        args=[str(directory/'Instante.exe'),'--no-browser']
+        args=[str(directory/'PolaroidEditor.exe'),'--no-browser']
         if no_updates:args.append('--no-updates')
         process=subprocess.Popen(args,env=env,creationflags=flags)
         deadline=time.monotonic()+25
@@ -58,16 +58,16 @@ with tempfile.TemporaryDirectory(prefix='Instante-install-test-') as temporary:
         raise AssertionError('A instalação não iniciou')
     def api(state,path,data):
         html=urllib.request.urlopen(state['url']).read().decode()
-        token=re.search('name="instante-token" content="([^"]+)',html).group(1)
-        headers={'X-Instante-Token':token,'Content-Type':'application/octet-stream' if isinstance(data,bytes) else 'application/json'}
+        token=re.search('name="polaroid-editor-token" content="([^"]+)',html).group(1)
+        headers={'X-PolaroidEditor-Token':token,'Content-Type':'application/octet-stream' if isinstance(data,bytes) else 'application/json'}
         body=data if isinstance(data,bytes) else json.dumps(data).encode()
         return urllib.request.urlopen(urllib.request.Request(state['url']+'/api/'+path,data=body,headers=headers)).read()
     try:
         subprocess.run([str(setup),'/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/TASKS=',f'/DIR={directory}'],check=True,timeout=90,creationflags=flags)
-        assert (directory/'installed.marker').read_text().strip()=='Instante'
-        assert (directory/'Instante.exe').read_bytes()==(ROOT/'dist'/'Instante-Portable.exe').read_bytes()
+        assert (directory/'installed.marker').read_text().strip()=='PolaroidEditor'
+        assert (directory/'PolaroidEditor.exe').read_bytes()==(ROOT/'dist'/'PolaroidEditor-Portable.exe').read_bytes()
         current,state=start()
-        second=subprocess.Popen([str(directory/'Instante.exe'),'--no-browser','--no-updates'],env=env,creationflags=flags)
+        second=subprocess.Popen([str(directory/'PolaroidEditor.exe'),'--no-browser','--no-updates'],env=env,creationflags=flags)
         assert second.wait(timeout=20)==0
         assert json.loads(metadata.read_text())['instance']==state['instance']
         api(state,'quit',{})
@@ -75,9 +75,9 @@ with tempfile.TemporaryDirectory(prefix='Instante-install-test-') as temporary:
         current=None
         # Simulate a verified newer queue using the genuine installer, without
         # publishing a fake version. The product must wait until normal exit.
-        updates=Path(env['LOCALAPPDATA'])/'Instante'/'updates'
+        updates=Path(env['LOCALAPPDATA'])/'PolaroidEditor'/'updates'
         updates.mkdir(parents=True,exist_ok=True)
-        staged=updates/'Instante-Setup-9999.0.0.exe'
+        staged=updates/'PolaroidEditor-Setup-9999.0.0.exe'
         shutil.copyfile(setup,staged)
         manifest={'version':'9999.0.0','url':f'https://github.com/{REPOSITORY}/releases/download/v9999.0.0/{staged.name}','sha256':hashlib.sha256(staged.read_bytes()).hexdigest(),'size':staged.stat().st_size}
         (updates/'pending.json').write_text(json.dumps(manifest),encoding='utf-8')
@@ -109,7 +109,10 @@ with tempfile.TemporaryDirectory(prefix='Instante-install-test-') as temporary:
         uninstaller=directory/'unins000.exe'
         if uninstaller.exists():
             subprocess.run([str(uninstaller),'/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART'],check=True,timeout=90,creationflags=flags)
-            deadline=time.monotonic()+10
-            while (directory/'Instante.exe').exists() and time.monotonic()<deadline:time.sleep(.1)
-            assert not (directory/'Instante.exe').exists(),'Desinstalação não removeu o aplicativo de teste'
+            # Inno's launcher can exit before its helper deletes the uninstaller.
+            # Wait for that final step before TemporaryDirectory cleans the sandbox.
+            deadline=time.monotonic()+30
+            while ((directory/'PolaroidEditor.exe').exists() or uninstaller.exists()) and time.monotonic()<deadline:time.sleep(.1)
+            assert not (directory/'PolaroidEditor.exe').exists(),'Desinstalação não removeu o aplicativo de teste'
+            assert not uninstaller.exists(),'O desinstalador não concluiu a limpeza da pasta de teste'
     print(json.dumps({'uninstall':'OK','user_installation_untouched':True}))

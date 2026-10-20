@@ -10,7 +10,7 @@ MAX_TOTAL = 4 * 1024**3
 
 
 def write_project(stream, records):
-    manifest = {'application': 'Instante', 'format': 1, 'photos': []}
+    manifest = {'application': 'PolaroidEditor', 'format': 1, 'photos': []}
     with zipfile.ZipFile(stream, 'w', zipfile.ZIP_STORED) as archive:
         for index, (record, meta) in enumerate(records):
             filename = f'photos/{index:04d}.bin'
@@ -34,8 +34,8 @@ def read_project(stream, make_record):
             if info.file_size > 1024**2:
                 raise ValueError('Manifesto do lote muito grande.')
             manifest = json.loads(archive.read(info))
-            if not isinstance(manifest, dict) or manifest.get('application') != 'Instante' or manifest.get('format') != 1:
-                raise ValueError('Este arquivo não é um lote do Instante compatível.')
+            if not isinstance(manifest, dict) or manifest.get('application') not in ('PolaroidEditor', 'Instante') or manifest.get('format') != 1:
+                raise ValueError('Este arquivo não é um lote do Polaroid Editor compatível.')
             photos = manifest.get('photos')
             if not isinstance(photos, list) or not 1 <= len(photos) <= MAX_PHOTOS:
                 raise ValueError('O lote deve conter entre 1 e 100 fotos.')
@@ -60,4 +60,4 @@ def read_project(stream, make_record):
                                                   'reviewed': bool(item.get('reviewed')), 'manual': bool(item.get('manual'))}))
         return staged
     except (zipfile.BadZipFile, KeyError, TypeError, UnicodeError) as error:
-        raise ValueError('Não foi possível abrir este lote do Instante.') from error
+        raise ValueError('Não foi possível abrir este lote do Polaroid Editor.') from error

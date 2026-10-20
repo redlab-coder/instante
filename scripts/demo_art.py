@@ -29,11 +29,11 @@ def make_demos(directory):
     image=Image.new('RGB',(900,1200),'#315b6a');draw=ImageDraw.Draw(image)
     draw.rounded_rectangle((75,75,825,1125),radius=300,outline='#a3bdc3',width=3)
     draw.ellipse((380,260,520,400),fill='#c9906c')
-    draw.text((450,560),'Pequenos',font=font(68,True),anchor='mm',fill='#f3f1e8')
-    draw.text((450,650),'instantes.',font=font(68,True),anchor='mm',fill='#f3f1e8')
+    draw.text((450,560),'Boas',font=font(68,True),anchor='mm',fill='#f3f1e8')
+    draw.text((450,650),'memórias.',font=font(68,True),anchor='mm',fill='#f3f1e8')
     draw.text((450,830),'O QUE IMPORTA FICA.',font=font(21),anchor='mm',fill='#bdd0d5')
-    image.save(directory/'Instantes.png')
-    return [directory/'Horizontes.png',directory/'Marés.png',directory/'Instantes.png']
+    image.save(directory/'Memórias.png')
+    return [directory/'Horizontes.png',directory/'Marés.png',directory/'Memórias.png']
 
 
 if __name__=='__main__':make_demos(Path(__file__).resolve().parents[1]/'tests/artifacts/demo')

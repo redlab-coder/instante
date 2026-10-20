@@ -1,30 +1,30 @@
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.1.0"
 #endif
 [Setup]
-AppId={{AAE0E3E8-B729-46AE-B534-2E04C256A5C1}
-AppName=Instante
+AppId={{F2777E7D-38D9-45D3-A932-F9E7F7BD5D71}
+AppName=Polaroid Editor
 AppVersion={#AppVersion}
 AppPublisher=RedLab
-AppPublisherURL=https://github.com/redlab-coder/instante
-AppSupportURL=https://github.com/redlab-coder/instante/issues
-AppUpdatesURL=https://github.com/redlab-coder/instante/releases
-DefaultDirName={localappdata}\Programs\Instante
+AppPublisherURL=https://github.com/redlab-coder/polaroid-editor
+AppSupportURL=https://github.com/redlab-coder/polaroid-editor/issues
+AppUpdatesURL=https://github.com/redlab-coder/polaroid-editor/releases
+DefaultDirName={localappdata}\Programs\Polaroid Editor
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 WizardStyle=modern
-SetupIconFile=..\assets\instante.ico
-UninstallDisplayIcon={app}\Instante.exe
+SetupIconFile=..\assets\polaroid-editor.ico
+UninstallDisplayIcon={app}\PolaroidEditor.exe
 OutputDir=..\dist
-OutputBaseFilename=Instante-Setup-{#AppVersion}
+OutputBaseFilename=PolaroidEditor-Setup-{#AppVersion}
 Compression=lzma2/fast
 SolidCompression=yes
 MinVersion=10.0.17763
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
-AppMutex=Local\Instante.Installed.Running
-SetupMutex=Local\Instante.Setup.Running
+AppMutex=Local\PolaroidEditor.Installed.Running
+SetupMutex=Local\PolaroidEditor.Setup.Running
 CloseApplications=no
 RestartApplications=no
 SetupLogging=yes
@@ -36,15 +36,15 @@ Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortugue
 Name: "desktopicon"; Description: "Criar atalho na área de trabalho"; Flags: unchecked
 
 [Files]
-Source: "..\dist\Instante-Portable.exe"; DestDir: "{app}"; DestName: "Instante.exe"; Flags: ignoreversion
+Source: "..\dist\PolaroidEditor-Portable.exe"; DestDir: "{app}"; DestName: "PolaroidEditor.exe"; Flags: ignoreversion
 Source: "..\assets\installed.marker"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{userprograms}\Instante"; Filename: "{app}\Instante.exe"
-Name: "{userdesktop}\Instante"; Filename: "{app}\Instante.exe"; Tasks: desktopicon
+Name: "{userprograms}\Polaroid Editor"; Filename: "{app}\PolaroidEditor.exe"
+Name: "{userdesktop}\Polaroid Editor"; Filename: "{app}\PolaroidEditor.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\Instante.exe"; Description: "Abrir o Instante"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\PolaroidEditor.exe"; Description: "Abrir o Polaroid Editor"; Flags: nowait postinstall skipifsilent
 
 [Code]
 function OpenProcess(Access: LongWord; InheritHandle: Boolean; ProcessId: LongWord): THandle;

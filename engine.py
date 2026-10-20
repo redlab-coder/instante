@@ -13,7 +13,7 @@ RED_START = 1295
 SRGB = ImageCms.ImageCmsProfile(ImageCms.createProfile('sRGB'))
 DEFAULTS = dict(cx=.5, cy=.5, zoom=1, rotation=270, mode='contain', brightness=1,
                 contrast=1, saturation=1, sharpness=1)
-CONTENT_BOX = '_instante_content_box'
+CONTENT_BOX = '_polaroid-editor_content_box'
 
 
 def content_bounds(image):

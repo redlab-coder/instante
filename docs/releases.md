@@ -7,7 +7,7 @@
 
 O GitHub Actions executa os testes, compila no Windows, verifica o programa e o instalador e publica os arquivos já testados. Uma alteração na branch principal é verificada, mas somente uma tag de versão publica uma release.
 
-As releases incluem `Instante-Setup-<versão>.exe`, `Instante-Portable.exe`, `update.json` e `SHA256SUMS.txt`. O atualizador instalado aceita apenas o endereço de instalador esperado neste repositório e verifica tamanho e SHA-256 antes de instalar ao encerrar.
+As releases incluem `PolaroidEditor-Setup-<versão>.exe`, `PolaroidEditor-Portable.exe`, `update.json` e `SHA256SUMS.txt`. O atualizador instalado aceita apenas o endereço de instalador esperado neste repositório e verifica tamanho e SHA-256 antes de instalar ao encerrar.
 
 O README deve apontar para um instalador publicado; alinhe seu link à versão de entrega.
 

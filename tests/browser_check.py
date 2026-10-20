@@ -29,11 +29,10 @@ def run(url):
         page.locator('#zoom-number').fill('1.50');page.locator('#zoom-number').press('Enter')
         page.locator('#rotate').click();assert page.evaluate('photos[0].manual&&!photos[0].reviewed')
         page.locator('[data-fit=contain]').click();assert page.evaluate('photos[0].edits.zoom')==1
-        # Upright is a display transform; export edits never change on view toggle.
-        edits=page.evaluate('JSON.stringify(photos[0].edits)')
-        page.locator('[data-view=print]').click();page.wait_for_function("document.getElementById('tile-image').width===1500")
-        assert page.evaluate('JSON.stringify(photos[0].edits)')==edits
-        page.locator('[data-view=upright]').click()
+        # Every preview is upright; exports retain the horizontal print geometry.
+        assert page.locator('[data-view]').count()==0
+        assert page.title()=='Polaroid Editor'
+        page.wait_for_function("document.getElementById('tile-image').width===1063&&document.getElementById('tile-image').height===1500")
         page.locator('#photo-list .photo-select').first.click();page.keyboard.press('ArrowDown');assert page.evaluate('selected===photos[1].id')
         page.locator('#invert').click()
         page.locator('#review-batch').click();assert page.locator('.batch-card').count()==3
@@ -41,7 +40,7 @@ def run(url):
         # Save includes the original files and can be reopened with exact adjustments.
         saved_edits=page.evaluate('JSON.stringify(photos.map(p=>p.edits))')
         with page.expect_download() as event:page.locator('#save-project').click()
-        batch=artifacts/'roundtrip.instante';event.value.save_as(batch)
+        batch=artifacts/'roundtrip.polaroid';event.value.save_as(batch)
         page.wait_for_function('!exporting');page.on('dialog',lambda d:d.accept())
         page.locator('#project-file').set_input_files(str(batch));page.wait_for_function('!importing&&photos.length===3')
         assert page.evaluate('JSON.stringify(photos.map(p=>p.edits))')==saved_edits
@@ -76,7 +75,9 @@ def run(url):
         page.screenshot(path=str(artifacts/'workspace.png'),full_page=True)
         (ROOT/'docs/images').mkdir(parents=True,exist_ok=True)
         page.screenshot(path=str(ROOT/'docs/images/workspace.png'),full_page=True)
-        page.locator('.sheet-open').first.click();page.screenshot(path=str(ROOT/'docs/images/print.png'),full_page=True)
+        page.locator('.sheet-open').first.click()
+        page.wait_for_function("document.getElementById('sheet-dialog-image').naturalHeight>document.getElementById('sheet-dialog-image').naturalWidth")
+        page.screenshot(path=str(ROOT/'docs/images/preview.png'),full_page=True)
         page.locator('#sheet-dialog [data-close-dialog]').click()
         for width in (1366,900,740,520,375,320):
             page.set_viewport_size({'width':width,'height':900});page.evaluate('window.scrollTo(0,0)');page.wait_for_timeout(100)

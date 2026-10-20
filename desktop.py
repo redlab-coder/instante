@@ -22,7 +22,7 @@ def icon_image():
 
 
 class SingleInstance:
-    def __init__(self, namespace='Instante', mutex_name=None):
+    def __init__(self, namespace='PolaroidEditor', mutex_name=None):
         self.handle = None
         self.owner = False
         root = Path(os.environ.get('LOCALAPPDATA', Path.home())) / namespace
@@ -39,7 +39,7 @@ class SingleInstance:
             ctypes.set_last_error(0)
             self.handle = kernel.CreateMutexW(None, False, name)
             if not self.handle:
-                raise OSError(ctypes.get_last_error(), 'Não foi possível iniciar o Instante.')
+                raise OSError(ctypes.get_last_error(), 'Não foi possível iniciar o Polaroid Editor.')
             self.owner = ctypes.get_last_error() != 183  # ERROR_ALREADY_EXISTS
         else:
             self.owner = True
@@ -62,7 +62,7 @@ class SingleInstance:
                     raise ValueError('URL inválida')
                 with urllib.request.urlopen(url + '/health', timeout=1) as response:
                     health = json.load(response)
-                if health.get('product') == 'Instante' and health.get('instance') == state['instance']:
+                if health.get('product') == 'Polaroid Editor' and health.get('instance') == state['instance']:
                     return url
             except (OSError, ValueError, KeyError):
                 pass
@@ -85,7 +85,7 @@ class SingleInstance:
 def confirm_shutdown():
     if os.name != 'nt':
         return True
-    return ctypes.windll.user32.MessageBoxW(None, 'Encerrar o Instante? Salve o lote ou exporte as montagens antes de continuar.\nAs fotos e ajustes desta sessão serão descartados.', 'Instante', 0x24 | 0x10000) == 6
+    return ctypes.windll.user32.MessageBoxW(None, 'Encerrar o Polaroid Editor? Salve o lote ou exporte as montagens antes de continuar.\nAs fotos e ajustes desta sessão serão descartados.', 'Polaroid Editor', 0x24 | 0x10000) == 6
 
 
 def run_tray(url, request_shutdown, has_photos, updater=None):
@@ -97,13 +97,13 @@ def run_tray(url, request_shutdown, has_photos, updater=None):
             return
         request_shutdown()
     items = [
-        pystray.MenuItem('Abrir Instante', open_app, default=True),
+        pystray.MenuItem('Abrir Polaroid Editor', open_app, default=True),
         pystray.Menu.SEPARATOR,
-        pystray.MenuItem('Encerrar Instante', quit_app),
+        pystray.MenuItem('Encerrar Polaroid Editor', quit_app),
     ]
     if updater:
         items.extend([pystray.Menu.SEPARATOR,
                       pystray.MenuItem(lambda item: updater.status, None, enabled=False),
                       pystray.MenuItem('Verificar atualizações', lambda icon, item: updater.check_async())])
-    icon = pystray.Icon('Instante', icon_image(), f'Instante {VERSION} · Estúdio de impressão', menu=pystray.Menu(*items))
+    icon = pystray.Icon('PolaroidEditor', icon_image(), f'Polaroid Editor {VERSION}', menu=pystray.Menu(*items))
     return icon

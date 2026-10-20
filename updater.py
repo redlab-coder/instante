@@ -17,7 +17,7 @@ import urllib.request
 from version import VERSION, REPOSITORY
 
 MAX_DOWNLOAD = 150 * 1024**2
-LOG = logging.getLogger('instante.updater')
+LOG = logging.getLogger('polaroid-editor.updater')
 
 
 def version_tuple(value):
@@ -28,9 +28,9 @@ def version_tuple(value):
 
 def installed_directory():
     directory = Path(sys.executable).resolve().parent
-    if getattr(sys, 'frozen', False) and Path(sys.executable).name.lower() == 'instante.exe':
+    if getattr(sys, 'frozen', False) and Path(sys.executable).name.lower() == 'polaroideditor.exe':
         marker = directory / 'installed.marker'
-        if marker.is_file() and marker.read_text(encoding='utf-8').strip() == 'Instante':
+        if marker.is_file() and marker.read_text(encoding='utf-8').strip() == 'PolaroidEditor':
             return directory
     return None
 
@@ -40,7 +40,7 @@ def validate_manifest(value):
         raise ValueError('Manifesto de atualização inválido.')
     version_tuple(value.get('version'))
     version = value['version']
-    expected = f'https://github.com/{REPOSITORY}/releases/download/v{version}/Instante-Setup-{version}.exe'
+    expected = f'https://github.com/{REPOSITORY}/releases/download/v{version}/PolaroidEditor-Setup-{version}.exe'
     digest = value.get('sha256')
     if value.get('url') != expected or not isinstance(digest, str) or not re.fullmatch(r'[a-fA-F0-9]{64}', digest):
         raise ValueError('Origem ou verificação da atualização inválida.')
@@ -53,7 +53,7 @@ def validate_manifest(value):
 class Updater:
     def __init__(self, directory, root=None, current=VERSION, opener=urllib.request.urlopen):
         self.directory = Path(directory).resolve()
-        self.root = Path(root or Path(os.environ.get('LOCALAPPDATA', Path.home())) / 'Instante' / 'updates')
+        self.root = Path(root or Path(os.environ.get('LOCALAPPDATA', Path.home())) / 'PolaroidEditor' / 'updates')
         self.root.mkdir(parents=True, exist_ok=True)
         self.current = current
         self.opener = opener
@@ -77,7 +77,7 @@ class Updater:
     def destination(self, manifest):
         # File names are derived from a validated numeric version, never from a
         # server-provided file path or a release asset's arbitrary name.
-        return self.root / f"Instante-Setup-{manifest['version']}.exe"
+        return self.root / f"PolaroidEditor-Setup-{manifest['version']}.exe"
 
     def snapshot(self):
         # Each transition replaces the whole value. Reading the status never
@@ -100,7 +100,7 @@ class Updater:
             if self.stopped.is_set():
                 return
             self.status = 'Verificando atualizações…'
-            request = urllib.request.Request(f'https://github.com/{REPOSITORY}/releases/latest/download/update.json', headers={'User-Agent':f'Instante/{self.current}'})
+            request = urllib.request.Request(f'https://github.com/{REPOSITORY}/releases/latest/download/update.json', headers={'User-Agent':f'PolaroidEditor/{self.current}'})
             with self.opener(request, timeout=20) as response:
                 raw = response.read(65537)
                 if len(raw) > 65536:
@@ -110,7 +110,7 @@ class Updater:
                 self.pending = None
                 self._ui_state = {'state': 'idle', 'version': None}
                 (self.root / 'pending.json').unlink(missing_ok=True)
-                self.status = 'Instante atualizado'
+                self.status = 'Polaroid Editor atualizado'
                 return
             candidate = manifest['version']
             target = self.destination(manifest)
@@ -119,7 +119,7 @@ class Updater:
                 self._ui_state = {'state': 'downloading', 'version': candidate}
                 temporary = target.with_suffix('.part')
                 try:
-                    request = urllib.request.Request(manifest['url'], headers={'User-Agent':f'Instante/{self.current}'})
+                    request = urllib.request.Request(manifest['url'], headers={'User-Agent':f'PolaroidEditor/{self.current}'})
                     count, digest = 0, hashlib.sha256()
                     with self.opener(request, timeout=30) as response, temporary.open('wb') as stream:
                         while chunk := response.read(256 * 1024):
@@ -158,10 +158,10 @@ class Updater:
                 self.check()
                 if self.stopped.wait(6 * 60 * 60):
                     return
-        threading.Thread(target=watch, daemon=True, name='Instante-updates').start()
+        threading.Thread(target=watch, daemon=True, name='PolaroidEditor-updates').start()
 
     def check_async(self):
-        threading.Thread(target=self.check, daemon=True, name='Instante-update-check').start()
+        threading.Thread(target=self.check, daemon=True, name='PolaroidEditor-update-check').start()
 
     def install_on_exit(self):
         self.stopped.set()

@@ -56,10 +56,10 @@ def start_export(records):
             oldest = min(JOBS, key=lambda k: JOBS[k]['created'])
             JOBS.pop(oldest)['directory'].cleanup()
         job_id = secrets.token_hex(12)
-        directory = tempfile.TemporaryDirectory(prefix='Instante-export-')
+        directory = tempfile.TemporaryDirectory(prefix='PolaroidEditor-export-')
         names = output_names([meta['name'] for _, meta in records])
         job = dict(state='running', done=0, total=len(records), error=None, directory=directory,
-                   filename=names[0] if len(records) == 1 else 'Instante-polaroids.zip',
+                   filename=names[0] if len(records) == 1 else 'PolaroidEditor-polaroids.zip',
                    created=time.monotonic(), path=Path(directory.name) / 'result')
         JOBS[job_id] = job
     def work():
@@ -85,7 +85,7 @@ def start_export(records):
             job['error'] = f'Falha em {current_name}. Nenhum arquivo parcial foi disponibilizado; tente exportar novamente.'
             job['state'] = 'failed'
             job['path'].unlink(missing_ok=True)
-    threading.Thread(target=work, daemon=True, name='Instante-export').start()
+    threading.Thread(target=work, daemon=True, name='PolaroidEditor-export').start()
     return job_id
 
 
@@ -129,7 +129,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.json_reply({'error': 'Acesso inválido.'}, 403)
         path = urlparse(self.path).path
         if path == '/health':
-            return self.json_reply({'product': 'Instante', 'version': VERSION, 'instance': INSTANCE, 'pid': os.getpid()})
+            return self.json_reply({'product': 'Polaroid Editor', 'version': VERSION, 'instance': INSTANCE, 'pid': os.getpid()})
         if path == '/':
             html = (ROOT / 'ui/index.html').read_text(encoding='utf-8')
             html = html.replace('__TOKEN__', TOKEN).replace('__VERSION__', VERSION)
@@ -147,7 +147,7 @@ class Handler(BaseHTTPRequestHandler):
         global LAST_ACTIVE
         origin = self.headers.get('Origin')
         expected = f'http://127.0.0.1:{self.server.server_port}'
-        if not self.authorized_host() or self.headers.get('X-Instante-Token') != TOKEN or (origin and origin != expected):
+        if not self.authorized_host() or self.headers.get('X-PolaroidEditor-Token') != TOKEN or (origin and origin != expected):
             return self.json_reply({'error': 'Acesso inválido.'}, 403)
         LAST_ACTIVE = time.monotonic()
         path = urlparse(self.path).path
@@ -224,7 +224,7 @@ class Handler(BaseHTTPRequestHandler):
                 records = snapshot(data['items'])
                 with tempfile.SpooledTemporaryFile(max_size=8*1024**2) as stream:
                     write_project(stream, records)
-                    self.send_file(stream, 'Meu lote.instante', 'application/zip')
+                    self.send_file(stream, 'Meu lote.polaroid', 'application/zip')
                 return
             if path == '/api/export/start':
                 return self.json_reply({'job': start_export(snapshot(data['items']))})
@@ -287,7 +287,7 @@ def main():
                 print(existing, flush=True)
         elif sys.platform == 'win32':
             import ctypes
-            ctypes.windll.user32.MessageBoxW(None, 'O Instante já está iniciando ou encerrando. Aguarde alguns segundos e tente novamente.', 'Instante', 0x40)
+            ctypes.windll.user32.MessageBoxW(None, 'O Polaroid Editor já está iniciando ou encerrando. Aguarde alguns segundos e tente novamente.', 'Polaroid Editor', 0x40)
         return
     try:
         server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
@@ -310,9 +310,9 @@ def main():
     stopped = threading.Event()
     shutdown_lock = threading.Lock()
     diagnostic = None
-    if os.environ.get('INSTANTE_TEST_TRACE'):
+    if os.environ.get('POLAROID_EDITOR_TEST_TRACE'):
         import faulthandler
-        diagnostic = open(os.environ['INSTANTE_TEST_TRACE'], 'w')
+        diagnostic = open(os.environ['POLAROID_EDITOR_TEST_TRACE'], 'w')
         faulthandler.enable(file=diagnostic)
     tray = None
     def request_shutdown():

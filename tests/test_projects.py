@@ -32,9 +32,22 @@ class ProjectTests(unittest.TestCase):
             broken.seek(0)
             with self.assertRaises(ValueError):read_project(broken,PhotoRecord)
 
+    def test_legacy_instante_batch_opens_with_original_bytes(self):
+        record=self.fixture();stream=io.BytesIO();write_project(stream,[(record,{'name':'Antiga.png'})])
+        old=io.BytesIO()
+        with zipfile.ZipFile(io.BytesIO(stream.getvalue())) as source, zipfile.ZipFile(old,'w') as destination:
+            for name in source.namelist():
+                data=source.read(name)
+                if name=='project.json':
+                    manifest=json.loads(data);self.assertEqual(manifest['application'],'PolaroidEditor')
+                    manifest['application']='Instante';data=json.dumps(manifest).encode()
+                destination.writestr(name,data)
+        old.seek(0);loaded=read_project(old,PhotoRecord)
+        self.assertEqual(loaded[0][0].original.read_bytes(),record.original.read_bytes())
+
     def test_unknown_version_and_empty_file_rejected(self):
         broken=io.BytesIO()
-        with zipfile.ZipFile(broken,'w') as archive:archive.writestr('project.json',json.dumps({'application':'Instante','format':99,'photos':[]}))
+        with zipfile.ZipFile(broken,'w') as archive:archive.writestr('project.json',json.dumps({'application':'PolaroidEditor','format':99,'photos':[]}))
         broken.seek(0)
         with self.assertRaises(ValueError):read_project(broken,PhotoRecord)
         with self.assertRaises(ValueError):read_project(io.BytesIO(b'not a zip'),PhotoRecord)

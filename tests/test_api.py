@@ -24,7 +24,7 @@ class ApiTests(unittest.TestCase):
         with app.LOCK:app.IMAGES.clear()
         app.CACHE.clear()
     def request(self,path,data={},raw=False,token=app.TOKEN,origin=None,name='Foto.jpg'):
-        headers={'X-Instante-Token':token,'Content-Type':'application/octet-stream' if raw else 'application/json','X-Filename':name}
+        headers={'X-PolaroidEditor-Token':token,'Content-Type':'application/octet-stream' if raw else 'application/json','X-Filename':name}
         if origin:headers['Origin']=origin
         return urllib.request.urlopen(urllib.request.Request(self.url+'/api/'+path,data=data if raw else json.dumps(data).encode(),headers=headers),timeout=30)
     def upload(self,name='Foto.jpg'):
